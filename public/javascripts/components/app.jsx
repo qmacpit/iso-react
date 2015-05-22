@@ -1,10 +1,14 @@
 var React = require("react"),
-    Search = require("./search");
+    Search = require("./search"),
+    Feeders = require("./feeders");
 
 var App = React.createClass({
   render() {
     return (
-      <Search />
+        <div>
+          <Search />
+          <Feeders/>
+        </div>
     );
   }
 });

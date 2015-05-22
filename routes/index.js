@@ -9,6 +9,14 @@ require("node-jsx").install({
 var React = require("react"),
     App = React.createFactory(require("../public/javascripts/components/app"));
 
+var feeders = [
+    {
+        id: "F1"
+    },
+    {
+        id: "F2"
+    }
+]
 /* GET home page. */
 router.get('/', function(req, res) {
   var markup = React.renderToString(App());      
