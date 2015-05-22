@@ -1,35 +1,23 @@
 var React = require("react");
 
 var Feeders = React.createClass({
-  getInitialState: function() {
-    console.log("1")
-    return {data: [
-        {
-            id: "F1"
-        },
-        {
-            id: "F2"
-        }
-    ]};
-  },
-  render() {
+   render() {
     return (
-        <ul>
+        <ul >
             {
-                this.state.data.map(function(feeder) {
-                    return <li key={feeder.id}>{feeder.id}</li>
-                })
+                this.props.data.map((function(feeder) {
+                    return <li key={feeder.id} onClick={this.feederSelected}>{feeder.id}</li>
+                }).bind(this))
             }
         </ul>
     );
   },
-  // changeSearch(event) {
-  //   var text = event.target.value;
-
-  //   this.setState({
-  //     search: text
-  //   });
-  // }
+  feederSelected(event, x, y) {
+    console.log("feederSelected");
+    console.log(event.target);
+    console.log(x);
+    console.log(y);
+  }
 });
 
 module.exports = Feeders;

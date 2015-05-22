@@ -260,12 +260,21 @@
 	    Search = __webpack_require__(4),
 	    Feeders = __webpack_require__(150);
 
+	var feeders = [
+	    {
+	        id: "F1"
+	    },
+	    {
+	        id: "F2"
+	    }
+	]
+
 	var App = React.createClass({displayName: "App",
 	  render:function() {
 	    return (
 	        React.createElement("div", null, 
 	          React.createElement(Search, null), 
-	          React.createElement(Feeders, null)
+	          React.createElement(Feeders, {data: feeders})
 	        )
 	    );
 	  }
@@ -18963,35 +18972,23 @@
 	var React = __webpack_require__(75);
 
 	var Feeders = React.createClass({displayName: "Feeders",
-	  getInitialState: function() {
-	    console.log("1")
-	    return {data: [
-	        {
-	            id: "F1"
-	        },
-	        {
-	            id: "F2"
-	        }
-	    ]};
-	  },
-	  render:function() {
+	   render:function() {
 	    return (
 	        React.createElement("ul", null, 
 	            
-	                this.state.data.map(function(feeder) {
-	                    return React.createElement("li", {key: feeder.id}, feeder.id)
-	                })
+	                this.props.data.map((function(feeder) {
+	                    return React.createElement("li", {key: feeder.id, onClick: this.feederSelected}, feeder.id)
+	                }).bind(this))
 	            
 	        )
 	    );
 	  },
-	  // changeSearch(event) {
-	  //   var text = event.target.value;
-
-	  //   this.setState({
-	  //     search: text
-	  //   });
-	  // }
+	  feederSelected:function(event, x, y) {
+	    console.log("feederSelected");
+	    console.log(event.target);
+	    console.log(x);
+	    console.log(y);
+	  }
 	});
 
 	module.exports = Feeders;
