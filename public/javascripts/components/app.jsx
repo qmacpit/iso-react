@@ -2,26 +2,31 @@ var React = require("react"),
     Search = require("./search"),
     Feeders = require("./feeders");
 
-var feeders = [
-    {
-        id: "F1"
-    },
-    {
-        id: "F2"
-    }
-]
+// var feeders = [
+//     {
+//         id: "F111"
+//     },
+//     {
+//         id: "F222"
+//     }
+// ]
 
 var App = React.createClass({
   getInitialState() {
     console.log("1");
     console.log(this.props);
-    if (!this.props.feeders)
-        this.props.feeders = feeders;
-    return {feeders: this.props.feeders};
+    
+    if (typeof window !== "undefined") {      
+      if (typeof dataCache !== undefined)
+       this.props.feeders = dataCache.feeders;
+    }
+
+    return {feeders: this.props.feeders};      
   },
   render() {
      console.log("2");
     console.log(this.props);
+
     return (
         <div>
           <Search />

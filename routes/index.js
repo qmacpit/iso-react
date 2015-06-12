@@ -11,22 +11,25 @@ var React = require("react"),
 
 var feeders = [
     {
-        id: "F11"
+        id: "F1"
     },
     {
-        id: "F22"
+        id: "F2"
     }
 ]
 /* GET home page. */
 router.get('/', function(req, res) {
 
-  var markup = React.renderToString(App({
-    xxx: "xxxx",
-    feeders: feeders}));      
+  var markup = React.renderToString(
+        App({    
+                feeders: feeders
+        })
+    );      
 
   res.render('index', { 
     title: 'Express',
-    markup: markup 
+    markup: markup ,
+    feeders: JSON.stringify(feeders)
   });
 });
 
