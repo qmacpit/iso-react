@@ -2,6 +2,7 @@ var React = require("react");
 
 var Search = React.createClass({
   getInitialState() {
+    console.log("s1")
     return {
       search: ""
     };

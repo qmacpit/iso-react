@@ -11,15 +11,18 @@ var React = require("react"),
 
 var feeders = [
     {
-        id: "F1"
+        id: "F11"
     },
     {
-        id: "F2"
+        id: "F22"
     }
 ]
 /* GET home page. */
 router.get('/', function(req, res) {
-  var markup = React.renderToString(App());      
+
+  var markup = React.renderToString(App({
+    xxx: "xxxx",
+    feeders: feeders}));      
 
   res.render('index', { 
     title: 'Express',

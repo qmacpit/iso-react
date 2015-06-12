@@ -12,11 +12,20 @@ var feeders = [
 ]
 
 var App = React.createClass({
+  getInitialState() {
+    console.log("1");
+    console.log(this.props);
+    if (!this.props.feeders)
+        this.props.feeders = feeders;
+    return {feeders: this.props.feeders};
+  },
   render() {
+     console.log("2");
+    console.log(this.props);
     return (
         <div>
           <Search />
-          <Feeders data={feeders}/>          
+          <Feeders data={this.state.feeders}/>          
         </div>
     );
   }
