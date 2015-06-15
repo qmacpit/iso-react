@@ -1,5 +1,4 @@
 var express = require('express');
-var router = express.Router();
 
 require("node-jsx").install({
     harmony: true, 
@@ -17,8 +16,8 @@ var feeders = [
         id: "F2"
     }
 ]
-/* GET home page. */
-router.get('/', function(req, res) {
+
+module.exports = function(req, res) {
 
   var markup = React.renderToString(
         App({    
@@ -33,6 +32,4 @@ router.get('/', function(req, res) {
         feeders: feeders
     })
   });
-});
-
-module.exports = router;
+};
