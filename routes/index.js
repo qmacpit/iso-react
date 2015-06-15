@@ -22,14 +22,16 @@ router.get('/', function(req, res) {
 
   var markup = React.renderToString(
         App({    
-                feeders: feeders
+            feeders: feeders
         })
     );      
 
   res.render('index', { 
     title: 'Express',
     markup: markup ,
-    feeders: JSON.stringify(feeders)
+    dataCache: JSON.stringify({
+        feeders: feeders
+    })
   });
 });
 
