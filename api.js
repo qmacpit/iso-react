@@ -3,13 +3,9 @@ var index = require('./routes/index'),
 
 module.exports = function(app){
 
-    app.get('/', index);
+    app.get('/', index.main);
 
-    app.get("/:feederId", function(req,res){
-        console.log(req.params)
-        console.log(req.params.signetId)
-        res.send("feeders").end();
-    })
+    app.get("/:feederId", index.feederSelected);
 
     app.get("/:feederId/:signetId", function(req,res){
         console.log(req.params)

@@ -113,11 +113,17 @@
 	    console.log(this.props);
 	    
 	    if (typeof window !== "undefined") {      
-	      if (typeof dataCache !== undefined)
-	       this.props.feeders = dataCache.feeders;
+	      if (typeof dataCache !== undefined) {
+	        this.props.feeders = dataCache.feeders;
+	        this.props.signets = dataCache.signets;
+	      }
+	             
 	    }
 
-	    return {feeders: this.props.feeders};      
+	    return {
+	      feeders: this.props.feeders,
+	      signets: this.props.signets
+	    };      
 	  },
 	  loadSignets: function(feederId){
 	    console.log("loading signets: " + feederId)
