@@ -1,4 +1,5 @@
-var express = require('express');
+var express = require('express'),
+    Data = require("../code/data.js");
 
 require("node-jsx").install({
     harmony: true, 
@@ -8,28 +9,20 @@ require("node-jsx").install({
 var React = require("react"),
     App = React.createFactory(require("../public/javascripts/components/app"));
 
-var feeders = [
-    {
-        id: "F1"
-    },
-    {
-        id: "F2"
-    }
-]
-
 module.exports = function(req, res) {
 
-  var markup = React.renderToString(
-        App({    
+    var feeders = Data.getFeeders(),
+        markup = React.renderToString(
+            App({    
+                feeders: feeders
+            })
+        );      
+
+    res.render('index', { 
+        title: 'Express',
+        markup: markup ,
+        dataCache: JSON.stringify({
             feeders: feeders
         })
-    );      
-
-  res.render('index', { 
-    title: 'Express',
-    markup: markup ,
-    dataCache: JSON.stringify({
-        feeders: feeders
-    })
-  });
+    });
 };

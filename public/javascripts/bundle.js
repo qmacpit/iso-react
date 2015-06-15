@@ -105,17 +105,9 @@
 	    Search = __webpack_require__(4),
 	    Feeders = __webpack_require__(5);
 
-	// var feeders = [
-	//     {
-	//         id: "F111"
-	//     },
-	//     {
-	//         id: "F222"
-	//     }
-	// ]
-
 	var App = React.createClass({displayName: "App",
 	  getInitialState:function() {
+
 	    console.log("1");
 	    console.log(this.props);
 	    
@@ -127,7 +119,8 @@
 	    return {feeders: this.props.feeders};      
 	  },
 	  render:function() {
-	     console.log("2");
+	    
+	    console.log("2");
 	    console.log(this.props);
 
 	    return (

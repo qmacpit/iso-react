@@ -2,17 +2,9 @@ var React = require("react"),
     Search = require("./search"),
     Feeders = require("./feeders");
 
-// var feeders = [
-//     {
-//         id: "F111"
-//     },
-//     {
-//         id: "F222"
-//     }
-// ]
-
 var App = React.createClass({
   getInitialState() {
+
     console.log("1");
     console.log(this.props);
     
@@ -24,7 +16,8 @@ var App = React.createClass({
     return {feeders: this.props.feeders};      
   },
   render() {
-     console.log("2");
+    
+    console.log("2");
     console.log(this.props);
 
     return (
