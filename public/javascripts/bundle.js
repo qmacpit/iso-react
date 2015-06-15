@@ -103,6 +103,7 @@
 
 	var React = __webpack_require__(75),
 	    Search = __webpack_require__(4),
+	    Signets = __webpack_require__(151),
 	    Feeders = __webpack_require__(5);
 
 	var App = React.createClass({displayName: "App",
@@ -118,15 +119,27 @@
 
 	    return {feeders: this.props.feeders};      
 	  },
+	  loadSignets: function(feederId){
+	    console.log("loading signets: " + feederId)
+	    var me = this;
+	    $.getJSON("/REST/" + feederId + "/signets")
+	    .then(function(signets){
+	      console.log(signets);
+	      me.setState({
+	        "signets": signets
+	      });
+	    })
+	  },
 	  render:function() {
-	    
+
 	    console.log("2");
 	    console.log(this.props);
 
 	    return (
 	        React.createElement("div", null, 
 	          React.createElement(Search, null), 
-	          React.createElement(Feeders, {data: this.state.feeders})
+	          React.createElement(Feeders, {data: this.state.feeders, parent: this}), 
+	          React.createElement(Signets, {data: this.state.signets})
 	        )
 	    );
 	  }
@@ -368,20 +381,19 @@
 	    return (
 	        React.createElement("ul", null, 
 	            
-	                    this.props.data 
-	                    ? this.props.data.map((function(feeder) {
-	                        return React.createElement("li", {key: feeder.id, onClick: this.feederSelected}, feeder.id)
-	                    }).bind(this))
-	                    : ""
+	              this.props.data 
+	              ? this.props.data.map((function(feeder) {
+	                  return React.createElement("li", {key: feeder.id, onClick: this.feederSelected}, feeder.id)
+	              }).bind(this))
+	              : ""
 	            
 	        )
 	    );
 	  },
-	  feederSelected:function(event, x, y) {
-	    console.log("feederSelected");
-	    console.log(event.target);
-	    console.log(x);
-	    console.log(y);
+	  feederSelected:function(event, dataReactId) {    
+	    var feederId  = dataReactId.split("$")[1]
+	    console.log(feederId);
+	    this.props.parent.loadSignets(feederId);
 	  }
 	});
 
@@ -19002,6 +19014,38 @@
 	module.exports = toArray;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(30)))
+
+/***/ },
+/* 151 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(75);
+
+	var Signets = React.createClass({displayName: "Signets",
+	   render:function() {    
+	    return (
+	        React.createElement("ul", null, 
+	            
+	              this.props.data 
+	              ? this.props.data.map((function(feeder) {
+	                  return React.createElement("li", {key: feeder.id, onClick: this.signetSelected}, feeder.id)
+	              }).bind(this))
+	              : ""
+	            
+	        )
+	    );
+	  },
+	  setSignets: function(){
+	    console.log("setting signets")
+	  },
+	  signetSelected:function(event, dataReactId) {    
+	    // var feederId  = dataReactId.split("$")[1]
+	    // console.log(feederId);
+	    // this.props.parent.loadSignets(feederId);
+	  }
+	});
+
+	module.exports = Signets;
 
 /***/ }
 /******/ ]);
