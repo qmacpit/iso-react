@@ -113,6 +113,15 @@
 	    console.log(this.props);
 	    
 	    if (typeof window !== "undefined") {      
+	      var me = this;
+	      window.onpopstate = function(data){
+	        console.log("onpopstate")
+	        console.log(data)
+	        if (data.state) {
+	          me.loadSignets(data.state.feederId);
+	        }
+	      }
+
 	      if (typeof dataCache !== undefined) {
 	        this.props.feeders = dataCache.feeders;
 	        this.props.signets = dataCache.signets;
@@ -134,6 +143,9 @@
 	      me.setState({
 	        "signets": signets
 	      });
+	      history.pushState({
+	        feederId: feederId
+	      }, null, feederId);
 	    })
 	  },
 	  render:function() {
