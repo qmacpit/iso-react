@@ -101,8 +101,8 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(75),
-	    Search = __webpack_require__(4),
+	var React = __webpack_require__(75),    
+	    Toolbox = __webpack_require__(152),
 	    Signets = __webpack_require__(151),
 	    Feeders = __webpack_require__(5);
 
@@ -112,15 +112,8 @@
 	    console.log("1");
 	    console.log(this.props);
 	    
-	    if (typeof window !== "undefined") {      
-	      var me = this;
-	      window.onpopstate = function(data){
-	        console.log("onpopstate")
-	        console.log(data)
-	        if (data.state) {
-	          me.loadSignets(data.state.feederId);
-	        }
-	      }
+	    if (Toolbox.isBrowser()) {            
+	      window.onpopstate = this.onPopState.bind(this);
 
 	      if (typeof dataCache !== undefined) {
 	        this.props.feeders = dataCache.feeders;
@@ -133,6 +126,10 @@
 	      feeders: this.props.feeders,
 	      signets: this.props.signets
 	    };      
+	  },
+	  onPopState: function(data){
+	    if (data.state)
+	      this.loadSignets(data.state.feederId);    
 	  },
 	  loadSignets: function(feederId){
 	    console.log("loading signets: " + feederId)
@@ -155,7 +152,6 @@
 
 	    return (
 	        React.createElement("div", null, 
-	          React.createElement(Search, null), 
 	          React.createElement(Feeders, {data: this.state.feeders, parent: this}), 
 	          React.createElement(Signets, {data: this.state.signets})
 	        )
@@ -357,38 +353,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(30)))
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(75);
-
-	var Search = React.createClass({displayName: "Search",
-	  getInitialState:function() {
-	    console.log("s1")
-	    return {
-	      search: ""
-	    };
-	  },
-	  render:function() {
-	    return (
-	      React.createElement("div", {className: "search-component"}, 
-	        React.createElement("input", {type: "text", onChange: this.changeSearch}), 
-	        React.createElement("p", null, React.createElement("span", null, "You are searching for: ", this.state.search))
-	      )
-	    );
-	  },
-	  changeSearch:function(event) {
-	    var text = event.target.value;
-
-	    this.setState({
-	      search: text
-	    });
-	  }
-	});
-
-	module.exports = Search;
-
-/***/ },
+/* 4 */,
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -19064,6 +19029,17 @@
 	});
 
 	module.exports = Signets;
+
+/***/ },
+/* 152 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	module.exports = {
+	    isBrowser: function(){
+	        return typeof window !== "undefined";
+	    }
+	};
 
 /***/ }
 /******/ ]);

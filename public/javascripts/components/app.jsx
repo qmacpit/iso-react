@@ -1,5 +1,5 @@
-var React = require("react"),
-    Search = require("./search"),
+var React = require("react"),    
+    Toolbox = require("../toolbox"),
     Signets = require("./signets"),
     Feeders = require("./feeders");
 
@@ -9,15 +9,8 @@ var App = React.createClass({
     console.log("1");
     console.log(this.props);
     
-    if (typeof window !== "undefined") {      
-      var me = this;
-      window.onpopstate = function(data){
-        console.log("onpopstate")
-        console.log(data)
-        if (data.state) {
-          me.loadSignets(data.state.feederId);
-        }
-      }
+    if (Toolbox.isBrowser()) {            
+      window.onpopstate = this.onPopState.bind(this);
 
       if (typeof dataCache !== undefined) {
         this.props.feeders = dataCache.feeders;
@@ -30,6 +23,10 @@ var App = React.createClass({
       feeders: this.props.feeders,
       signets: this.props.signets
     };      
+  },
+  onPopState: function(data){
+    if (data.state)
+      this.loadSignets(data.state.feederId);    
   },
   loadSignets: function(feederId){
     console.log("loading signets: " + feederId)
@@ -51,8 +48,7 @@ var App = React.createClass({
     console.log(this.props);
 
     return (
-        <div>
-          <Search />
+        <div>          
           <Feeders data={this.state.feeders} parent={this}/>          
           <Signets data={this.state.signets} />
         </div>
