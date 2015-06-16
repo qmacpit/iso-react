@@ -5,18 +5,13 @@ var React = require("react"),
 
 var App = React.createClass({
   getInitialState() {
-
-    console.log("1");
-    console.log(this.props);
     
     if (Toolbox.isBrowser()) {            
       window.onpopstate = this.onPopState.bind(this);
-
       if (typeof dataCache !== undefined) {
         this.props.feeders = dataCache.feeders;
         this.props.signets = dataCache.signets;
-      }
-             
+      }             
     }
 
     return {
@@ -29,11 +24,9 @@ var App = React.createClass({
       this.loadSignets(data.state.feederId);    
   },
   loadSignets: function(feederId){
-    console.log("loading signets: " + feederId)
     var me = this;
     $.getJSON("/REST/" + feederId + "/signets")
-    .then(function(signets){
-      console.log(signets);
+    .then(function(signets){      
       me.setState({
         "signets": signets
       });
@@ -43,10 +36,6 @@ var App = React.createClass({
     })
   },
   render() {
-
-    console.log("2");
-    console.log(this.props);
-
     return (
         <div>          
           <Feeders data={this.state.feeders} parent={this}/>          

@@ -20,8 +20,8 @@ function render(res, dataCacheObject){
 module.exports = {
     main: function(req, res) {
         render(res, {    
-                feeders: Data.getFeeders()
-            });
+            feeders: Data.getFeeders()
+        });
     },
     feederSelected: function(req, res) {        
         render(res, {    

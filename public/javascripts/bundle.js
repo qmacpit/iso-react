@@ -108,18 +108,13 @@
 
 	var App = React.createClass({displayName: "App",
 	  getInitialState:function() {
-
-	    console.log("1");
-	    console.log(this.props);
 	    
 	    if (Toolbox.isBrowser()) {            
 	      window.onpopstate = this.onPopState.bind(this);
-
 	      if (typeof dataCache !== undefined) {
 	        this.props.feeders = dataCache.feeders;
 	        this.props.signets = dataCache.signets;
-	      }
-	             
+	      }             
 	    }
 
 	    return {
@@ -132,11 +127,9 @@
 	      this.loadSignets(data.state.feederId);    
 	  },
 	  loadSignets: function(feederId){
-	    console.log("loading signets: " + feederId)
 	    var me = this;
 	    $.getJSON("/REST/" + feederId + "/signets")
-	    .then(function(signets){
-	      console.log(signets);
+	    .then(function(signets){      
 	      me.setState({
 	        "signets": signets
 	      });
@@ -146,10 +139,6 @@
 	    })
 	  },
 	  render:function() {
-
-	    console.log("2");
-	    console.log(this.props);
-
 	    return (
 	        React.createElement("div", null, 
 	          React.createElement(Feeders, {data: this.state.feeders, parent: this}), 
@@ -357,7 +346,8 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(75);
+	var React = __webpack_require__(75),
+	    Toolbox = __webpack_require__(152);    
 
 	var Feeders = React.createClass({displayName: "Feeders",
 	   render:function() {    
@@ -374,9 +364,7 @@
 	    );
 	  },
 	  feederSelected:function(event, dataReactId) {    
-	    var feederId  = dataReactId.split("$")[1]
-	    console.log(feederId);
-	    this.props.parent.loadSignets(feederId);
+	    this.props.parent.loadSignets(Toolbox.parseDataReactId(dataReactId));
 	  }
 	});
 
@@ -19038,6 +19026,11 @@
 	module.exports = {
 	    isBrowser: function(){
 	        return typeof window !== "undefined";
+	    },
+	    parseDataReactId: function(dataReactId){
+	        var dataArray = dataReactId.split("$");
+	        if (Array.isArray(dataArray) && dataArray.length)
+	            return dataArray[1];
 	    }
 	};
 
