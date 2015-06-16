@@ -1,5 +1,5 @@
 var index = require('./routes/index'),
-    Data = require("./code/data");
+    Data = require("./core/data");
 
 module.exports = function(app){
 
@@ -8,16 +8,13 @@ module.exports = function(app){
     app.get("/:feederId", index.feederSelected);
 
     app.get("/:feederId/:signetId", function(req,res){
-        console.log(req.params)
-        console.log(req.params.signetId)
         res.send("signets").end();
     })
 
     // ===================================
     // =               REST              =
     // ===================================
-    app.get("/REST/:feederId/signets", function(req,res){
-        console.log(req.params)        
+    app.get("/REST/:feederId/signets", function(req,res){    
         res.json(Data.getSignets(req.params.feederId));
     })
 

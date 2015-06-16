@@ -1,5 +1,5 @@
 var express = require('express'),
-    Data = require("../code/data.js");
+    Data = require("../core/data.js");
 
 require("node-jsx").install({
     harmony: true, 

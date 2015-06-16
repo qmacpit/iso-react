@@ -18998,22 +18998,15 @@
 	        React.createElement("ul", null, 
 	            
 	              this.props.data 
-	              ? this.props.data.map((function(feeder) {
-	                  return React.createElement("li", {key: feeder.id, onClick: this.signetSelected}, feeder.id)
+	              ? this.props.data.map((function(signet) {
+	                  return React.createElement("li", {key: signet.id, onClick: this.signetSelected}, signet.id)
 	              }).bind(this))
 	              : ""
 	            
 	        )
 	    );
 	  },
-	  setSignets: function(){
-	    console.log("setting signets")
-	  },
-	  signetSelected:function(event, dataReactId) {    
-	    // var feederId  = dataReactId.split("$")[1]
-	    // console.log(feederId);
-	    // this.props.parent.loadSignets(feederId);
-	  }
+	  signetSelected:function(event, dataReactId){}
 	});
 
 	module.exports = Signets;
