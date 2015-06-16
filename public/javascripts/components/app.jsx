@@ -7,11 +7,9 @@ var App = React.createClass({
   getInitialState() {
     
     if (Toolbox.isBrowser()) {            
-      window.onpopstate = this.onPopState.bind(this);
-      if (typeof dataCache !== undefined) {
-        this.props.feeders = dataCache.feeders;
-        this.props.signets = dataCache.signets;
-      }             
+      window.onpopstate = this.onPopState;
+      this.props.feeders = dataCache.feeders;
+      this.props.signets = dataCache.signets;      
     }
 
     return {
