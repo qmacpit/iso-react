@@ -16,7 +16,7 @@ var App = React.createClass({
   },
   render() {
     return (
-        <div>
+        <div>          
           <Search />
           <Feeders data={this.state.feeders}/>          
         </div>

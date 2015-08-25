@@ -17,3 +17,9 @@ npm install -g webpack
 webpack --watch
 ```
 
+### development
+```bash
+npm start
+```
+hot reload: http://localhost:3001/webpack-dev-server/
+application: http://localhost:3000
