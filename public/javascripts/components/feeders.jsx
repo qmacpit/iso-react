@@ -1,4 +1,5 @@
-var React = require("react");
+var React = require("react"),
+    Toolbox = require("../toolbox");    
 
 var Feeders = React.createClass({
    render() {    
@@ -14,11 +15,8 @@ var Feeders = React.createClass({
         </ul>
     );
   },
-  feederSelected(event, x, y) {
-    console.log("feederSelected");
-    console.log(event.target);
-    console.log(x);
-    console.log(y);
+  feederSelected(event, dataReactId) {    
+    this.props.parent.loadSignets(Toolbox.parseDataReactId(dataReactId));
   }
 });
 

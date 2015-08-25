@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express'),
+    Data = require("../core/data.js");
 
 require("node-jsx").install({
     harmony: true, 
@@ -9,28 +9,24 @@ require("node-jsx").install({
 var React = require("react"),
     App = React.createFactory(require("../public/javascripts/components/app"));
 
-var feeders = [
-    {
-        id: "F1"
+
+function render(res, dataCacheObject){
+    res.render('index', { 
+            title: 'Express',
+            markup: React.renderToString(App(dataCacheObject)),
+            dataCache: JSON.stringify(dataCacheObject)
+    });
+}
+module.exports = {
+    main: function(req, res) {
+        render(res, {    
+            feeders: Data.getFeeders()
+        });
     },
-    {
-        id: "F2"
+    feederSelected: function(req, res) {        
+        render(res, {    
+            feeders: Data.getFeeders(),
+            signets: Data.getSignets(req.params.feederId),
+        });
     }
-]
-/* GET home page. */
-router.get('/', function(req, res) {
-
-  var markup = React.renderToString(
-        App({    
-                feeders: feeders
-        })
-    );      
-
-  res.render('index', { 
-    title: 'Express',
-    markup: markup ,
-    feeders: JSON.stringify(feeders)
-  });
-});
-
-module.exports = router;
+};

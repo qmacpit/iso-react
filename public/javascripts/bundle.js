@@ -54,7 +54,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "55bbffad109d6f2343bf"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "ecd79e92c25b1f18fff3"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -26849,28 +26849,46 @@
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(207), RootInstanceProvider = __webpack_require__(215), ReactMount = __webpack_require__(114), React = __webpack_require__(59); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
 
-	var React = __webpack_require__(59),
-	    Search = __webpack_require__(217),
-	    Feeders = __webpack_require__(221);
+	var React = __webpack_require__(59),    
+	    Toolbox = __webpack_require__(217),
+	    Signets = __webpack_require__(218),
+	    Feeders = __webpack_require__(222);
 
 	var App = React.createClass({displayName: "App",
 	  getInitialState:function() {
 	    
-	    if (typeof window !== "undefined") {      
-	      if (typeof dataCache !== undefined)
-	       this.props.feeders = dataCache.feeders;
+	    if (Toolbox.isBrowser()) {            
+	      window.onpopstate = this.onPopState;
+	      this.props.feeders = dataCache.feeders;
+	      this.props.signets = dataCache.signets;      
 	    }
 
 	    return {
-	      feeders: this.props.feeders
-	    };
+	      feeders: this.props.feeders,
+	      signets: this.props.signets
+	    };      
+	  },
+	  onPopState: function(data){
+	    if (data.state)
+	      this.loadSignets(data.state.feederId);    
+	  },
+	  loadSignets: function(feederId){
+	    var me = this;
+	    $.getJSON("/REST/" + feederId + "/signets")
+	    .then(function(signets){      
+	      me.setState({
+	        "signets": signets
+	      });
+	      history.pushState({
+	        feederId: feederId
+	      }, null, feederId);
+	    })
 	  },
 	  render:function() {
 	    return (
 	        React.createElement("div", null, 
-	          React.createElement("h1", null, "dupa!!!!"), 
-	          React.createElement(Search, null), 
-	          React.createElement(Feeders, {data: this.state.feeders})
+	          React.createElement(Feeders, {data: this.state.feeders, parent: this}), 
+	          React.createElement(Signets, {data: this.state.signets})
 	        )
 	    );
 	  }
@@ -26878,7 +26896,7 @@
 
 	module.exports = App;
 
-	/* REACT HOT LOADER */ }).call(this); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(59))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "app.jsx" + ": " + err.message); } }); } } })(); }
+	/* REACT HOT LOADER */ }).call(this); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(219), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(59))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "app.jsx" + ": " + err.message); } }); } } })(); }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)(module)))
 
 /***/ },
@@ -27292,50 +27310,58 @@
 
 /***/ },
 /* 217 */
+/***/ function(module, exports) {
+
+	
+	module.exports = {
+	    isBrowser: function(){
+	        return typeof window !== "undefined";
+	    },
+	    parseDataReactId: function(dataReactId){
+	        var dataArray = dataReactId.split("$");
+	        if (Array.isArray(dataArray) && dataArray.length)
+	            return dataArray[1];
+	    }
+	};
+
+/***/ },
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(207), RootInstanceProvider = __webpack_require__(215), ReactMount = __webpack_require__(114), React = __webpack_require__(59); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
 
 	var React = __webpack_require__(59);
 
-	var Search = React.createClass({displayName: "Search",
-	  getInitialState:function() {
-	    console.log("s1")
-	    return {
-	      search: ""
-	    };
-	  },
-	  render:function() {
+	var Signets = React.createClass({displayName: "Signets",
+	   render:function() {    
 	    return (
-	      React.createElement("div", {className: "search-component"}, 
-	        React.createElement("input", {type: "text", onChange: this.changeSearch}), 
-	        React.createElement("p", null, React.createElement("span", null, "You are searching for: ", this.state.search)), 
-	        React.createElement("p", null, React.createElement("span", null, "You are searching for: ", this.state.search))
-	      )
+	        React.createElement("ul", null, 
+	            
+	              this.props.data 
+	              ? this.props.data.map((function(signet) {
+	                  return React.createElement("li", {key: signet.id, onClick: this.signetSelected}, signet.id)
+	              }).bind(this))
+	              : ""
+	            
+	        )
 	    );
 	  },
-	  changeSearch:function(event) {
-	    var text = event.target.value;
-
-	    this.setState({
-	      search: text
-	    });
-	  }
+	  signetSelected:function(event, dataReactId){}
 	});
 
-	module.exports = Search;
+	module.exports = Signets;
 
-	/* REACT HOT LOADER */ }).call(this); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(59))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "search.jsx" + ": " + err.message); } }); } } })(); }
+	/* REACT HOT LOADER */ }).call(this); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(219), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(59))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "signets.jsx" + ": " + err.message); } }); } } })(); }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)(module)))
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isReactClassish = __webpack_require__(219),
-	    isReactElementish = __webpack_require__(220);
+	var isReactClassish = __webpack_require__(220),
+	    isReactElementish = __webpack_require__(221);
 
 	function makeExportsHot(m, React) {
 	  if (isReactElementish(m.exports, React)) {
@@ -27389,7 +27415,7 @@
 
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports) {
 
 	function hasRender(Class) {
@@ -27439,10 +27465,10 @@
 	module.exports = isReactClassish;
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isReactClassish = __webpack_require__(219);
+	var isReactClassish = __webpack_require__(220);
 
 	function isReactElementish(obj, React) {
 	  if (!obj) {
@@ -27456,12 +27482,13 @@
 	module.exports = isReactElementish;
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(207), RootInstanceProvider = __webpack_require__(215), ReactMount = __webpack_require__(114), React = __webpack_require__(59); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
 
-	var React = __webpack_require__(59);
+	var React = __webpack_require__(59),
+	    Toolbox = __webpack_require__(217);    
 
 	var Feeders = React.createClass({displayName: "Feeders",
 	   render:function() {    
@@ -27477,17 +27504,14 @@
 	        )
 	    );
 	  },
-	  feederSelected:function(event, x, y) {
-	    console.log("feederSelected");
-	    console.log(event.target);
-	    console.log(x);
-	    console.log(y);
+	  feederSelected:function(event, dataReactId) {    
+	    this.props.parent.loadSignets(Toolbox.parseDataReactId(dataReactId));
 	  }
 	});
 
 	module.exports = Feeders;
 
-	/* REACT HOT LOADER */ }).call(this); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(59))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "feeders.jsx" + ": " + err.message); } }); } } })(); }
+	/* REACT HOT LOADER */ }).call(this); if (true) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(219), foundReactClasses = false; if (makeExportsHot(module, __webpack_require__(59))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "feeders.jsx" + ": " + err.message); } }); } } })(); }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)(module)))
 
 /***/ }

@@ -1,24 +1,43 @@
-var React = require("react"),
-    Search = require("./search"),
+var React = require("react"),    
+    Toolbox = require("../toolbox"),
+    Signets = require("./signets"),
     Feeders = require("./feeders");
 
 var App = React.createClass({
   getInitialState() {
     
-    if (typeof window !== "undefined") {      
-      if (typeof dataCache !== undefined)
-       this.props.feeders = dataCache.feeders;
+    if (Toolbox.isBrowser()) {            
+      window.onpopstate = this.onPopState;
+      this.props.feeders = dataCache.feeders;
+      this.props.signets = dataCache.signets;      
     }
 
     return {
-      feeders: this.props.feeders
-    };
+      feeders: this.props.feeders,
+      signets: this.props.signets
+    };      
+  },
+  onPopState: function(data){
+    if (data.state)
+      this.loadSignets(data.state.feederId);    
+  },
+  loadSignets: function(feederId){
+    var me = this;
+    $.getJSON("/REST/" + feederId + "/signets")
+    .then(function(signets){      
+      me.setState({
+        "signets": signets
+      });
+      history.pushState({
+        feederId: feederId
+      }, null, feederId);
+    })
   },
   render() {
     return (
-        <div>          
-          <Search />
-          <Feeders data={this.state.feeders}/>          
+        <div>
+          <Feeders data={this.state.feeders} parent={this}/>          
+          <Signets data={this.state.signets} />
         </div>
     );
   }

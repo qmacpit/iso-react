@@ -3,19 +3,13 @@
   <head>
     <title>{{ title }}</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script type="text/javascript">
-      var dataCache = {
-        feeders: [
-            {
-                id: "F1"
-            },
-            {
-                id: "F2"
-            }
-        ]
-      }
-    </script>
+
+    <script src="http://code.jquery.com/jquery-2.1.4.js"></script>    
+    <script>
+      var dataCache = {{{ dataCache }}};
+    </script>        
     <script src="javascripts/bundle.js"></script>    
+    
   </head>
   <body>
     <div id="content">
